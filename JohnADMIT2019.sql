@@ -329,3 +329,61 @@ SHOW ERRORS;
 
 
 
+
+PROCEDURE PR_UPDATE_MARK1
+    (P_SID NUMBER, P_CID CHAR, P_MARK NUMBER)
+    IS 
+    BEGIN 
+        UPDATE MM_GRADE
+        SET MARK = P_MARK
+        WHERE CID = P_CID AND SID = P_SID
+END PR_UPDATE_MARK;
+/
+SHOW ERRORS;
+
+
+
+
+create or PROCEDURE PR_UPDATE_MARK2
+    (P_SID NUMBER, P_CID CHAR, P_MARK NUMBER)
+    IS 
+        v_mark number(5,2);
+        e_invalid_mark exception;
+    BEGIN 
+        if p_mark between 0 and 100 then
+        select mark
+        into v_mark
+        from mm_grade
+        WHERE CID = P_CID AND 
+        upper(SID) = upper(P_SID);
+        update mm_grade 
+        set mark = p_mark
+        where sid = p_sid 
+        and upper(cid) = upper(p_cid)
+        else
+            raise e_invalid_mark;
+exception 
+    when no_data_found then 
+        raise_application_error(-20700,'no mark exists');
+    when e_invalid_mark then 
+        raise_application_error(-20855,'mark mas be between 0 and 100');
+    when others then
+        raise_application_error(-20123,'contact tech support');
+END PR_UPDATE_MARK2;
+/
+SHOW ERRORS;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
