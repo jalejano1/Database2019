@@ -376,10 +376,24 @@ SHOW ERRORS;
 
 
 
-
-
-
-
+insert into mm_grade
+    (sid, cid, mark)
+values 
+    (12345, 'bc4536', 99);
+    
+    
+    
+create or replace trigger tr_biur_mmgrade_bcs_courses_bad
+before insert or update of cid
+on mm_grade
+for each row
+begin
+    if upper(substring(:new. cid,1,3)) = 'BCS' then
+        raise_application_error(-20099,'bcs courses are not current');
+    end if;
+end tr_biur_mmgrade_bcs_courses_bad;
+/
+show errors;
 
 
 
