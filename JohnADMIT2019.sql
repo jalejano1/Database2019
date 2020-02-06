@@ -397,7 +397,17 @@ show errors;
 
 
 
-
+create or replace trigger tr_BIS_mm_student_no_weenked
+begin insert
+on mm_student
+for each row
+begin
+    if to_char(sysdate,'Day')IN('Saturday','Sunday') then
+        raise_application_error(-20000,'no work on the weekend');
+    end if;
+end tr_BIS_mm_student_no_weenked;
+/
+show errors;
 
 
 
